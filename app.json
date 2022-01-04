@@ -1,10 +1,12 @@
 {
   "expo": {
-    "name": "ColorSleuthApp",
+    "name": "Color Sleuth",
     "slug": "ColorSleuthApp",
+    "description": "lorem ipsum dolor sit amet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "primaryColor": "#0f64fa",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
