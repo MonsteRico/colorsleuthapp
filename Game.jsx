@@ -9,6 +9,7 @@ import GameOverPopup from "./GameOverPopup";
 import { captureRef } from 'react-native-view-shot';
 import MyButton from "./MyButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SettingsContext from "./SettingsContext";
 
 
 const storeData = async (value) => {
@@ -32,15 +33,17 @@ const getData = async () => {
 }
 let highScoreSet = false;
 const Game = ({ onGameOver }) => {
+	const { settings, setSettings } = useContext(SettingsContext);
+
 	const [color, setColor] = useState(generateColor(darkMode));
-	const [diffColor, setDiffColor] = useState(generateDiffColor(color, 20));
+	const [diffColor, setDiffColor] = useState(generateDiffColor(color, settings[0].colorLevel));
 	const [lives, setLives] = useState(3);
 	const [score, setScore] = useState(0);
-	const [level, setLevel] = useState(1);
+	const [level, setLevel] = useState(settings[0].level);
 	const [differentX, setDifferentX] = useState(Math.floor(Math.random() * (level + 1)));
 	const [differentY, setDifferentY] = useState(Math.floor(Math.random() * (level + 1)));
 	const [squares, setSquares] = useState(generateSquaresArray(level, differentX, differentY, color, diffColor));
-	const [colorLevel, setColorLevel] = useState(20);
+	const [colorLevel, setColorLevel] = useState(settings[0].colorLevel);
 	const [gameOver, setGameOver] = useState(false);
 	const [highScore, setHighScore] = useState("0");
 	getData().then(
@@ -71,19 +74,21 @@ const Game = ({ onGameOver }) => {
 		return squaresArr;
 	}
 
+
+
 	function checkLevelUp(score) {
 		if (score < 10) {
-			return [1, 30];
+			return [settings[0].level, settings[0].colorLevel];
 		} else if (score < 20) {
-			return [2, 25];
+			return [settings[1].level, settings[1].colorLevel];
 		} else if (score < 25) {
-			return [3, 20];
+			return [settings[2].level, settings[2].colorLevel];
 		} else if (score < 30) {
-			return [4, 20];
+			return [settings[3].level, settings[3].colorLevel];
 		} else if (score < 40) {
-			return [4, 15];
+			return [settings[4].level, settings[4].colorLevel];
 		} else if (score >= 40) {
-			return [4, 10];
+			return [settings[5].level, settings[5].colorLevel];
 		}
 		return [0, 0];
 	}
@@ -151,14 +156,9 @@ const Game = ({ onGameOver }) => {
 		var newDiffColor = generateDiffColor(newColor, newColorLevel);
 		var newDiffX = 0;
 		var newDiffY = 0;
-		if (level < 5) {
-			// pick a number between 0 and level+1
-			newDiffX = Math.floor(Math.random() * (newLevel + 1));
-			newDiffY = Math.floor(Math.random() * (newLevel + 1));
-		} else {
-			newDiffX = Math.floor(Math.random() * 5);
-			newDiffY = Math.floor(Math.random() * 5);
-		}
+		// pick a number between 0 and level+1
+		newDiffX = Math.floor(Math.random() * (newLevel + 1));
+		newDiffY = Math.floor(Math.random() * (newLevel + 1));
 		var newSquares = generateSquaresArray(newLevel, newDiffX, newDiffY, newColor, newDiffColor);
 		setScore(newScore);
 		setColor(newColor);
