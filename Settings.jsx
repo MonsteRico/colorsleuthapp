@@ -8,7 +8,7 @@ import Game from "./Game";
 import MainMenu from "./MainMenu";
 import MyButton from "./MyButton";
 import Square from "./Square";
-import { darkBGColor, darkTextColor, lightBGColor, lightTextColor } from "./colors";
+import { darkBGColor, darkTextColor, lightBGColor, lightTextColor, lightPlaceholderTextColor, darkPlaceholderTextColor } from "./colors";
 
 import SquareRow from "./SquareRow";
 import ThemeContext from "./ThemeContext";
@@ -39,6 +39,7 @@ const Settings = ({ back }) => {
         },
         settingText: {
             color: darkMode ? darkTextColor : lightTextColor,
+            padding: 10
         },
         header: {
 
@@ -70,7 +71,7 @@ const Settings = ({ back }) => {
 
         setting: { flex: 1, justifyContent: "center", alignItems: "center" },
         switchSetting: { marginTop: 6, flex: 1 },
-        textInputSetting: { marginTop: 10, marginRight: 15, width: "100%", height: "100%", borderWidth: 1, }
+        textInputSetting: { borderColor: darkMode ? darkTextColor : lightTextColor, color: darkMode ? darkTextColor : lightTextColor, marginTop: 10, marginRight: 15, width: "100%", height: "100%", borderWidth: 1, }
     });
 
     // Difficulty settings states
@@ -139,9 +140,9 @@ const Settings = ({ back }) => {
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.subHeading}>Difficulty Settings</Text>
-                        <Text style={styles.settingText, { padding: 10 }}>If you would like to create custom levels of difficulty feel free to do so and report what you feel the best settings are. You can change the number of squares and the color level for each score bracket by tapping the text boxes below!</Text>
-                        <Text style={styles.settingText, { padding: 10 }}>Num of squares refers to the number of squares in a row. So the grid ends up being X by X squares. Min 1, Max 9</Text>
-                        <Text style={styles.settingText, { padding: 10 }}>Color Level refers to how much the color of the different square is changed by. Min 1, Max 99</Text>
+                        <Text style={styles.settingText}>If you would like to create custom levels of difficulty feel free to do so and report what you feel the best settings are. You can change the number of squares and the color level for each score bracket by tapping the text boxes below!</Text>
+                        <Text style={styles.settingText}>Num of squares refers to the number of squares in a row. So the grid ends up being X by X squares. Min 1, Max 9</Text>
+                        <Text style={styles.settingText}>Color Level refers to how much the color of the different square is changed by. Min 1, Max 99</Text>
                     </View>
                     <MyButton text="Reset to Default" onPress={() => {
                         setZeroTen({ level: 1, colorLevel: 30 });
@@ -156,7 +157,7 @@ const Settings = ({ back }) => {
 
                         <Text style={styles.settingNameDifficulty}>Num Squares</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${zeroTen.level + 1}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${zeroTen.level + 1}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = zeroTen.level + 1;
                                 }
@@ -171,7 +172,7 @@ const Settings = ({ back }) => {
                         </View>
                         <Text style={styles.settingNameDifficulty}>Color Level</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${zeroTen.colorLevel}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${zeroTen.colorLevel}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = zeroTen.colorLevel;
                                 }
@@ -189,7 +190,7 @@ const Settings = ({ back }) => {
 
                         <Text style={styles.settingNameDifficulty}>Num Squares</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${tenTwenty.level + 1}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${tenTwenty.level + 1}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = tenTwenty.level + 1;
                                 }
@@ -204,7 +205,7 @@ const Settings = ({ back }) => {
                         </View>
                         <Text style={styles.settingNameDifficulty}>Color Level</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${tenTwenty.colorLevel}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${tenTwenty.colorLevel}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = tenTwenty.colorLevel;
                                 }
@@ -222,7 +223,7 @@ const Settings = ({ back }) => {
 
                         <Text style={styles.settingNameDifficulty}>Num Squares</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyTwentyfive.level + 1}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyTwentyfive.level + 1}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = twentyTwentyfive.level + 1;
                                 }
@@ -237,7 +238,7 @@ const Settings = ({ back }) => {
                         </View>
                         <Text style={styles.settingNameDifficulty}>Color Level</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyTwentyfive.colorLevel}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyTwentyfive.colorLevel}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = twentyTwentyfive.colorLevel;
                                 }
@@ -255,7 +256,7 @@ const Settings = ({ back }) => {
 
                         <Text style={styles.settingNameDifficulty}>Num Squares</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyfiveThirty.level + 1}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyfiveThirty.level + 1}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = twentyfiveThirty.level + 1;
                                 }
@@ -270,7 +271,7 @@ const Settings = ({ back }) => {
                         </View>
                         <Text style={styles.settingNameDifficulty}>Color Level</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyfiveThirty.colorLevel}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${twentyfiveThirty.colorLevel}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = twentyfiveThirty.colorLevel;
                                 }
@@ -288,7 +289,7 @@ const Settings = ({ back }) => {
 
                         <Text style={styles.settingNameDifficulty}>Num Squares</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${thirtyForty.level + 1}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${thirtyForty.level + 1}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = thirtyForty.level + 1;
                                 }
@@ -303,7 +304,7 @@ const Settings = ({ back }) => {
                         </View>
                         <Text style={styles.settingNameDifficulty}>Color Level</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${thirtyForty.colorLevel}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${thirtyForty.colorLevel}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = thirtyForty.colorLevel;
                                 }
@@ -320,7 +321,7 @@ const Settings = ({ back }) => {
                         <Text style={styles.settingNameDifficulty}>40-Infinity</Text>
                         <Text style={styles.settingNameDifficulty}>Num Squares</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${fortyPlus.level + 1}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${fortyPlus.level + 1}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = fortyPlus.level + 1;
                                 }
@@ -335,7 +336,7 @@ const Settings = ({ back }) => {
                         </View>
                         <Text style={styles.settingNameDifficulty}>Color Level</Text>
                         <View style={styles.setting}>
-                            <TextInput keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${fortyPlus.colorLevel}`} onChangeText={(value) => {
+                            <TextInput placeholderTextColor={darkMode ? darkPlaceholderTextColor : lightPlaceholderTextColor} keyboardType="numeric" maxLength={3} style={styles.textInputSetting} placeholder={`${fortyPlus.colorLevel}`} onChangeText={(value) => {
                                 if (value === "") {
                                     value = fortyPlus.colorLevel;
                                 }

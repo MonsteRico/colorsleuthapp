@@ -36,7 +36,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
             flex: 1, marginTop: 25, marginBottom: 10, width: 50, height: undefined, aspectRatio: 1, resizeMode: "contain",
         },
     });
-    const appLogoImage = (darkMode ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjr-q7bZAl4SvzD3w7XiIxd9RqOkMMP9Z6GsMfaWqSlzEaBEfxaIOf1I4h4updZfn2xKk&usqp=CAU" : 'https://reactnative.dev/img/tiny_logo.png')
+    const appLogoImage = "./assets/appIcon.png";
     return (
         <>
             <StatusBar style={darkMode ? "light" : "dark"} />
@@ -44,9 +44,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <Image
                         style={styles.tinyLogo}
-                        source={{
-                            uri: appLogoImage,
-                        }}
+                        source={require("./assets/appIcon.png")}
                     />
                 </View>
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start" }}>
@@ -54,7 +52,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
                     <MyButton onPress={onPlay} text="Play" />
                     <MyButton onPress={onHowToPlay} text="How to Play" />
                     <MyButton onPress={onSettings} text="Settings" />
-                    <Text style={{ fontSize: 20, padding: 20, margin: 20 }}>Found a bug? DM Monster#8681 on Discord. Or you know, tell me in person.</Text>
+                    <Text style={{ color: darkMode ? darkTextColor : lightTextColor, fontSize: 20, padding: 20, margin: 20 }}>Found a bug? DM Monster#8681 on Discord. Or you know, tell me in person.</Text>
                 </View>
                 <View style={{ flex: 2 }}></View>
             </SafeAreaView>
