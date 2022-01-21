@@ -3,9 +3,9 @@
     "name": "Color Sleuth",
     "slug": "ColorSleuthApp",
     "description": "lorem ipsum dolor sit amet",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appIcon.png",
     "primaryColor": "#0f64fa",
     "splash": {
       "image": "./assets/splash.png",

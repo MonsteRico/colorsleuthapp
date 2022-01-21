@@ -44,7 +44,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <Image
                         style={styles.tinyLogo}
-                        source={require("./assets/appIcon.png")}
+                        source={require("./assets/logo.png")}
                     />
                 </View>
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start" }}>

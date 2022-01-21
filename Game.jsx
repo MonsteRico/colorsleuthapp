@@ -93,23 +93,40 @@ const Game = ({ onGameOver }) => {
 		return [0, 0];
 	}
 
+	let flashing = true;
+	const flash = () => {
+		if (flashing) {
+			flashing = !flashing;
+			var newSquares = generateSquaresArray(level, differentX, differentY, color, color);
+			setSquares(newSquares);
+		} else {
+			flashing = !flashing;
+			var newSquares = generateSquaresArray(level, differentX, differentY, color, diffColor);
+			setSquares(newSquares);
+		}
+	}
+
 	function handlePress(square) {
 		if (square.rowNum == differentX && square.colNum == differentY) {
-			console.log("CORRECT!");
+			//console.log("CORRECT!");
 			generateNewBoard(true);
 		} else {
-			console.log("WRONG!");
+			//console.log("WRONG!");
 			Vibration.vibrate(400, false);
 			const newLives = lives - 1;
 			setLives(newLives);
 			if (newLives <= 0) {
-				console.log("GAME OVER!");
+				const id = setInterval(flash, 250);
+				//console.log("GAME OVER!");
 				if (score > parseInt(highScore)) {
 					setHighScore(score.toString());
 					storeData(score.toString());
 					highScoreSet = false;
 				}
-				setGameOver(true);
+				setTimeout(() => {
+					clearInterval(id);
+					setGameOver(true);
+				}, 2000);
 			} else {
 				generateNewBoard(false);
 			}
@@ -169,9 +186,6 @@ const Game = ({ onGameOver }) => {
 		setColorLevel(newColorLevel);
 		setSquares(newSquares);
 	}
-
-
-
 
 	const viewRef = useRef();
 

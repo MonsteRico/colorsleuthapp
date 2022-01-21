@@ -13,6 +13,7 @@ import ThemeContext from "./ThemeContext";
 import SettingsContext from "./SettingsContext";
 
 import Settings from "./Settings";
+import { Appearance } from "react-native-web";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,11 +32,20 @@ function HowToPlayScreen({ route, navigation }) {
 function SettingsScreen({ route, navigation }) {
 	return <Settings back={() => navigation.goBack()} />;
 }
-
+let colorSchemeSet = false;
 export default function App() {
 	const [theme, setTheme] = useState("light");
 	function toggleTheme() {
 		setTheme(theme === "dark" ? "light" : "dark");
+	}
+	const colorScheme = Appearance.getColorScheme();
+	if (colorScheme === "dark" && !colorSchemeSet) {
+		colorSchemeSet = true;
+		setTheme("dark");
+	}
+	else if (!colorSchemeSet) {
+		colorSchemeSet = true;
+		setTheme("light");
 	}
 
 	const [settings, setSettings] = useState([
