@@ -2,8 +2,8 @@
   "expo": {
     "name": "Color Sleuth",
     "slug": "ColorSleuthApp",
-    "description": "lorem ipsum dolor sit amet",
-    "version": "1.1.0",
+    "description": "A game about choosing the color thats different!",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "primaryColor": "#0f64fa",
@@ -12,6 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "userInterfaceStyle": "automatic",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -24,7 +25,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.matthewgardner.ColorSleuthApp"

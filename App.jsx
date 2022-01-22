@@ -14,6 +14,7 @@ import SettingsContext from "./SettingsContext";
 
 import Settings from "./Settings";
 import { Appearance } from "react-native-web";
+import useColorScheme from "react-native/Libraries/Utilities/useColorScheme";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,7 @@ export default function App() {
 	function toggleTheme() {
 		setTheme(theme === "dark" ? "light" : "dark");
 	}
-	const colorScheme = Appearance.getColorScheme();
+	const colorScheme = useColorScheme();
 	if (colorScheme === "dark" && !colorSchemeSet) {
 		colorSchemeSet = true;
 		setTheme("dark");
