@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, setState, useReducer } from "react";
-import { Pressable, StyleSheet, Text, View, SafeAreaView, Dimensions, Button } from "react-native";
+import { Pressable, StyleSheet, Text, View, SafeAreaView, Dimensions, Button, Appearance, useColorScheme } from "react-native";
 import { ScreenStack } from "react-native-screens";
 import Game from "./Game";
 import HowToPlay from "./HowToPlay";
@@ -13,8 +13,6 @@ import ThemeContext from "./ThemeContext";
 import SettingsContext from "./SettingsContext";
 
 import Settings from "./Settings";
-import { Appearance } from "react-native-web";
-import useColorScheme from "react-native/Libraries/Utilities/useColorScheme";
 
 const Stack = createNativeStackNavigator();
 
