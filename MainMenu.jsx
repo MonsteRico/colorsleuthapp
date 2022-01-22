@@ -36,7 +36,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
             flex: 1, marginTop: 25, marginBottom: 10, width: 50, height: undefined, aspectRatio: 1, resizeMode: "contain",
         },
     });
-    const appLogoImage = (darkMode ? "./assets/lightLogo.png" : "./assets/logo");
+    const appLogoImage = (darkMode ? require("./assets/lightLogo.png") : require("./assets/logo.png"));
     return (
         <>
             <StatusBar style={darkMode ? "light" : "dark"} />
@@ -44,7 +44,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <Image
                         style={styles.tinyLogo}
-                        source={require(appLogoImage)}
+                        source={appLogoImage}
                     />
                 </View>
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start" }}>
