@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, setState, useReducer, useRef, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Vibration, Dimensions, Modal, Platform, Share } from "react-native";
+import React, { useState, useRef, useContext } from "react";
+import { StyleSheet, Text, View, Vibration, Modal, Platform, Share } from "react-native";
 import Square from "./Square";
-import { pSBC, hexToRgb, rgbToHex } from "./utils.js";
+import { determineHeightWidth, generateColor, generateDiffColor } from "./utils.js";
 import ThemeContext from "./ThemeContext";
 import { darkBGColor, lightBGColor, darkTextColor, lightTextColor } from "./colors.js";
 import GameOverPopup from "./GameOverPopup";
@@ -11,7 +11,7 @@ import MyButton from "./MyButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SettingsContext from "./SettingsContext";
 
-
+// stores the high score value input to AsyncStorage
 const storeData = async (value) => {
 	try {
 		await AsyncStorage.setItem('@highScore', value)
@@ -20,6 +20,7 @@ const storeData = async (value) => {
 	}
 }
 
+// retrieves the high score value from AsyncStorage
 const getData = async () => {
 	try {
 		const value = await AsyncStorage.getItem('@highScore')
@@ -33,8 +34,8 @@ const getData = async () => {
 }
 let highScoreSet = false;
 const Game = ({ onGameOver }) => {
+	// Initialize all the state variables, using the settings values
 	const { settings, setSettings } = useContext(SettingsContext);
-
 	const [color, setColor] = useState(generateColor(darkMode));
 	const [diffColor, setDiffColor] = useState(generateDiffColor(color, settings[0].colorLevel));
 	const [lives, setLives] = useState(3);
@@ -46,6 +47,9 @@ const Game = ({ onGameOver }) => {
 	const [colorLevel, setColorLevel] = useState(settings[0].colorLevel);
 	const [gameOver, setGameOver] = useState(false);
 	const [highScore, setHighScore] = useState("0");
+
+	// Check if there is a high score stored in AsyncStorage
+	// if there is, set the high score state variable to the value
 	getData().then(
 		(value) => {
 			if (value != null) {
@@ -55,11 +59,15 @@ const Game = ({ onGameOver }) => {
 		}
 	)
 
+	// Set theme
 	const { theme } = useContext(ThemeContext)
 	const darkMode = theme === "dark";
 
+	// Generate the array of squares with the square at (diffX, diffY) being the different color
 	function generateSquaresArray(curLevel, diffX, diffY, mainColor, changedColor) {
 		const squaresArr = [[]];
+		// We use curLevel + 1 so that the level can start at 1, but the number of squares
+		// in each row can be 2, making a 2x2 grid for the starting level
 		for (var i = 0; i < curLevel + 1; i++) {
 			squaresArr[i] = [];
 			for (var j = 0; j < curLevel + 1; j++) {
@@ -74,8 +82,7 @@ const Game = ({ onGameOver }) => {
 		return squaresArr;
 	}
 
-
-
+	// Check if the score meets the requirements to increase the difficulty
 	function checkLevelUp(score) {
 		if (score < 10) {
 			return [settings[0].level, settings[0].colorLevel];
@@ -93,6 +100,7 @@ const Game = ({ onGameOver }) => {
 		return [0, 0];
 	}
 
+	// When the game is over, flash the square that was different on the current set
 	let flashing = true;
 	const flash = () => {
 		if (flashing) {
@@ -106,34 +114,44 @@ const Game = ({ onGameOver }) => {
 		}
 	}
 
+	// Handles most of the game logic, is called every time the user taps a square
 	function handlePress(square) {
 		if (square.rowNum == differentX && square.colNum == differentY) {
-			//console.log("CORRECT!");
+			// If the user tapped the correct the square generate a new board and increase score
 			generateNewBoard(true);
-		} else {
-			//console.log("WRONG!");
+		} else if (lives > 0) {
+			// If the user tapped the wrong square, decrease the lives and generate a new board,
+			// this time without increasing score
 			Vibration.vibrate(400, false);
 			const newLives = lives - 1;
 			setLives(newLives);
+			// If the user has no lives left, the game is over
 			if (newLives <= 0) {
+				// Flash the square that was different
 				const id = setInterval(flash, 250);
-				//console.log("GAME OVER!");
+				// If the score is higher than the high score, set the high score
 				if (score > parseInt(highScore)) {
 					setHighScore(score.toString());
 					storeData(score.toString());
 					highScoreSet = false;
 				}
+				// Cancel the flash interval and set game over to true after 2 seconds
 				setTimeout(() => {
 					clearInterval(id);
 					setGameOver(true);
 				}, 2000);
 			} else {
+				// If the user has lives left, generate a new board without increasing score
 				generateNewBoard(false);
 			}
 		}
 	}
 
+	// Reset all the state variables to their initial values
 	function reset() {
+		// Setting variables and then setting the state based off those variables
+		// seemed to be the best way to ensure the states were all properly set.
+		// It also allowed some state variables to be based off of other state variables
 		highScoreSet = false;
 		var newScore = 0;
 		var newLives = 3;
@@ -164,7 +182,10 @@ const Game = ({ onGameOver }) => {
 		setSquares(newSquares);
 	}
 
+	// Generate a new board
 	function generateNewBoard(correct) {
+		// Increase the score if the user tapped the correct square
+		// Set the state variables to their new values
 		var newScore = correct ? score + 1 : score;
 		var newLevelData = checkLevelUp(newScore);
 		var newLevel = newLevelData[0];
@@ -173,7 +194,7 @@ const Game = ({ onGameOver }) => {
 		var newDiffColor = generateDiffColor(newColor, newColorLevel);
 		var newDiffX = 0;
 		var newDiffY = 0;
-		// pick a number between 0 and level+1
+		// pick a number between 0 and level+1 (the number of rows/columns)
 		newDiffX = Math.floor(Math.random() * (newLevel + 1));
 		newDiffY = Math.floor(Math.random() * (newLevel + 1));
 		var newSquares = generateSquaresArray(newLevel, newDiffX, newDiffY, newColor, newDiffColor);
@@ -187,8 +208,8 @@ const Game = ({ onGameOver }) => {
 		setSquares(newSquares);
 	}
 
+	// The funcction used to share the users high score
 	const viewRef = useRef();
-
 	const onShare = async () => {
 		try {
 			// react-native-view-shot caputures component
@@ -201,11 +222,10 @@ const Game = ({ onGameOver }) => {
 				});
 			}
 
-			//Platform.OS === 'ios' ? "" : " https://youtube.com"
-			// TODO replace youtube link with your own
-			let appLink = Platform.OS === 'ios' ? "https://apps.apple.com/us/app/youtube-watch-listen-stream/id544007664" : "https://play.google.com/store/apps/details?id=com.youtube.watch.listen.stream";
+			//Platform.OS === 'ios' ? "" : ""
+			let appLink = Platform.OS === 'ios' ? "https://apps.apple.com/us/app/color-sleuth/id1604077102" : "not possible";
 			if (Platform.OS === "web") {
-				appLink = "https://youtube.com";
+				appLink = "not possible";
 			}
 			if (Platform.OS != "web") {
 				const result = await Share.share({
@@ -224,6 +244,7 @@ const Game = ({ onGameOver }) => {
 					// dismissed
 				}
 			} else {
+				// web (although web isn't fully supported currently due to missing dependencies)
 				navigator.clipboard.writeText(`I got a score of ${score} in Color Sleuth! ` +
 					`You can play it here: ${appLink}`).then(function () {
 						console.log('Async: Copying to clipboard was successful!');
@@ -237,6 +258,7 @@ const Game = ({ onGameOver }) => {
 		}
 	};
 
+	// All of the styling for this screen
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
@@ -275,6 +297,8 @@ const Game = ({ onGameOver }) => {
 			color: darkMode ? darkTextColor : lightTextColor,
 		},
 	});
+
+	// The components that are rendered on the screen
 	return (
 		<View style={styles.container}>
 			<StatusBar style={darkMode ? "light" : "dark"} />
@@ -327,43 +351,5 @@ const Game = ({ onGameOver }) => {
 
 	);
 };
-
-function determineHeightWidth() {
-	return Dimensions.get("window").width > Dimensions.get("window").height
-		? Dimensions.get("window").height * 0.6
-		: Dimensions.get("window").width * 0.9;
-}
-
-function generateColor(darkModeOn) {
-	// generate a random color
-	const r = Math.floor(Math.random() * 256);
-	const g = Math.floor(Math.random() * 256);
-	const b = Math.floor(Math.random() * 256);
-	if (!darkModeOn) {
-		if (r + g + b > 600) {
-			return generateColor(darkModeOn);
-		}
-	} else {
-		if (r + g + b < 200) {
-			return generateColor(darkModeOn);
-		}
-	}
-	return rgbToHex(r, g, b);
-}
-
-function generateDiffColor(ogColor, level) {
-	// if ogColor is light negate level
-	var rgbOgColor = hexToRgb(ogColor);
-	var r = rgbOgColor.r;
-	var g = rgbOgColor.g;
-	var b = rgbOgColor.b;
-	// two out of three colors > 128
-
-	if (r + g + b > 382) {
-		return pSBC(-level / 100, ogColor);
-	} else {
-		return pSBC((level * 0.25) / 100, ogColor);
-	}
-}
 
 export default Game;

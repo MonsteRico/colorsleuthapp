@@ -1,8 +1,13 @@
+import { Dimensions } from "react-native";
+
 // convert rgb to hex
 export function rgbToHex(r, g, b) {
 	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
+// This function is used to darken or lighten a color based on some value
+// It is a helper to pSBC below
+// source https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
 // Version 4.0
 export const pSBCr = (d) => {
 	let i = parseInt,
@@ -27,6 +32,8 @@ export const pSBCr = (d) => {
 	return x;
 };
 
+// This function is used to darken or lighten a color based on some value
+// source https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
 export const pSBC = (p, c0, c1, l) => {
 	let r,
 		g,
@@ -72,6 +79,7 @@ export const pSBC = (p, c0, c1, l) => {
 };
 
 // convert hex to rgb
+// source https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 export function hexToRgb(hex) {
 	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 	var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -87,4 +95,47 @@ export function hexToRgb(hex) {
 				b: parseInt(result[3], 16),
 		  }
 		: null;
+}
+
+// Generates a random hex color
+// if the color is too close to white or black, it will generate a new color depending on
+// the the current theme
+export function generateColor(darkModeOn) {
+	// generate a random color
+	const r = Math.floor(Math.random() * 256);
+	const g = Math.floor(Math.random() * 256);
+	const b = Math.floor(Math.random() * 256);
+	if (!darkModeOn) {
+		if (r + g + b > 600) {
+			return generateColor(darkModeOn);
+		}
+	} else {
+		if (r + g + b < 200) {
+			return generateColor(darkModeOn);
+		}
+	}
+	return rgbToHex(r, g, b);
+}
+
+// Generates a hex color thats slightly different from the given color based on the level
+export function generateDiffColor(ogColor, level) {
+	// if ogColor is light negate level
+	var rgbOgColor = hexToRgb(ogColor);
+	var r = rgbOgColor.r;
+	var g = rgbOgColor.g;
+	var b = rgbOgColor.b;
+	// two out of three colors > 128
+
+	if (r + g + b > 382) {
+		return pSBC(-level / 100, ogColor);
+	} else {
+		return pSBC((level * 0.25) / 100, ogColor);
+	}
+}
+
+// Determines height and width of the grid of squares based on the screen dimensions
+export function determineHeightWidth() {
+	return Dimensions.get("window").width > Dimensions.get("window").height
+		? Dimensions.get("window").height * 0.6
+		: Dimensions.get("window").width * 0.9;
 }

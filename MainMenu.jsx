@@ -1,8 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, setState, useReducer, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Button, Pressable, Switch, Image, } from "react-native";
-import Square from "./Square";
-import { pSBC, hexToRgb, rgbToHex } from "./utils.js";
+import React, { useContext } from "react";
+import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
 import ThemeContext from "./ThemeContext";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor } from "./colors";
 import MyButton from "./MyButton";
@@ -52,7 +50,6 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
                     <MyButton onPress={onPlay} text="Play" />
                     <MyButton onPress={onHowToPlay} text="How to Play" />
                     <MyButton onPress={onSettings} text="Settings" />
-                    <Text style={{ color: darkMode ? darkTextColor : lightTextColor, fontSize: 20, padding: 20, margin: 20 }}>Found a bug? DM Monster#8681 on Discord. Or you know, tell me in person.</Text>
                 </View>
                 <View style={{ flex: 2 }}></View>
             </SafeAreaView>

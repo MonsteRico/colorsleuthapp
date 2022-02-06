@@ -1,8 +1,6 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState, setState, useReducer, useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Button, Pressable, Switch, } from "react-native";
-import Square from "./Square";
-import { pSBC, hexToRgb, rgbToHex } from "./utils.js";
+import React, { useContext } from "react";
+import { StyleSheet, Text, Pressable } from "react-native";
+import { pSBC } from "./utils.js";
 import ThemeContext from "./ThemeContext";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor } from "./colors";
 const MyButton = ({ onPress, text, }) => {

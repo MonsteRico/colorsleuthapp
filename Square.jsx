@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { Pressable } from "react-native";
 import { pSBC } from "./utils.js";
 function Square({ color, rowNum, colNum, onPress }) {

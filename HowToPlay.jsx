@@ -1,24 +1,13 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
-import React, { useContext, useState, setState, useReducer } from "react";
-import { Pressable, StyleSheet, Text, View, SafeAreaView, Dimensions, Button, Switch } from "react-native";
-import { ScreenStack } from "react-native-screens";
-import Game from "./Game";
-import MainMenu from "./MainMenu";
+import React, { useContext } from "react";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
+
 import MyButton from "./MyButton";
-import Square from "./Square";
-import SquareRow from "./SquareRow";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor } from "./colors";
 
 import ThemeContext from "./ThemeContext";
 const HowToPlay = ({ back }) => {
 	let { theme, toggleTheme } = useContext(ThemeContext);
 	let darkMode = theme === "dark";
-	const setIsDarkMode = (isDarkMode) => {
-		toggleTheme();
-		darkMode = !isDarkMode;
-	};
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,

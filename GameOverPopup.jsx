@@ -1,19 +1,18 @@
 import React, { useContext } from 'react'
-import { Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { Pressable } from 'react-native-web';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import ThemeContext from './ThemeContext';
-import { darkBGColor, lightBGColor, darkTextColor, lightTextColor } from './colors.js';
-import { hexToRgb } from './utils';
+import { darkBGColor, lightBGColor } from './colors.js';
+import { hexToRgb } from './utils.js';
 const GameOverPopup = ({ bgColor, high, score }) => {
 
     const { theme } = useContext(ThemeContext)
     const darkMode = theme === "dark";
 
+    // Choose a text color based on the background color
     function pickTextColor(color) {
-        // choose a text color based on the background color
         let rgb = hexToRgb(color);
         let brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-        return (brightness > 125) ? lightTextColor : darkTextColor;
+        return brightness > 125 ? lightTextColor : darkTextColor;
     }
 
     const textColor = pickTextColor(bgColor);

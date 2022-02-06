@@ -1,26 +1,20 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
-import React, { useContext, useState, setState, useReducer, useEffect } from "react";
-import { Pressable, StyleSheet, Text, View, SafeAreaView, Dimensions, Button, Switch, TextInput, ScrollView } from "react-native";
-import { ScreenStack } from "react-native-screens";
-import Game from "./Game";
-import MainMenu from "./MainMenu";
+import React, { useContext, useState } from "react";
+import { StyleSheet, Text, View, SafeAreaView, Switch, TextInput, ScrollView } from "react-native";
 import MyButton from "./MyButton";
-import Square from "./Square";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor, lightPlaceholderTextColor, darkPlaceholderTextColor } from "./colors";
-
-import SquareRow from "./SquareRow";
 import ThemeContext from "./ThemeContext";
 import SettingsContext from "./SettingsContext";
+
 const Settings = ({ back }) => {
     let { theme, toggleTheme } = useContext(ThemeContext);
     let { settings, setSettings } = useContext(SettingsContext);
+
     let darkMode = theme === "dark";
     const setIsDarkMode = (isDarkMode) => {
         toggleTheme();
         darkMode = !isDarkMode;
     }
+
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -120,12 +114,15 @@ const Settings = ({ back }) => {
         return [true, ""];
     }
 
-    /* <View style={styles.settingContainer}>
-                    <Text style={styles.settingName}>Dark Mode</Text>
-                    <View style={styles.setting}>
-                        <Switch style={styles.switchSetting} value={darkMode} onValueChange={() => setIsDarkMode(darkMode)} />
-                    </View>
-                </View> */
+    /*
+    A generic setting container
+    <View style={styles.settingContainer}>
+        <Text style={styles.settingName}>Dark Mode</Text>
+        <View style={styles.setting}>
+            <Switch style={styles.switchSetting} value={darkMode} onValueChange={() => setIsDarkMode(darkMode)} />
+        </View>
+    </View>
+    */
 
     return (
         <SafeAreaView style={styles.container}>
