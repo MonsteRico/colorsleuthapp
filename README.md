@@ -52,6 +52,7 @@ as well as making it fully web compatible and hosting it on my own web server.
         <figcaption>Game Over Screen</figcaption>
     </figure>
 </center>
+        
 ## Future Plans
 
 The biggest thing I want to do is continously fix bugs and keep the app supported. In the future I also want to test and release the app on Google Play Store/Android devices as well as make it compatible with web. Currently web is not supported due to some dependencies only working on iOS. I didn't release for Google Play Store at the start due to not having an Android device to test on. I also plan to add more settings if any are suggested.
