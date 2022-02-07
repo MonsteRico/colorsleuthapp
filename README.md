@@ -23,8 +23,7 @@ as well as making it fully web compatible and hosting it on my own web server.
 -   The game itself, where you play to get the highest score possible
 
 ## Screenshots
-
-<div style="-webkit-column-count: 2; -moz-column-count: 2; column-count: 2;">
+<center>
         <figure>
             <img width="200" src="/screenshots/appScreenshot1.png"
                 alt="Main Menu (Light Theme)">
@@ -45,12 +44,10 @@ as well as making it fully web compatible and hosting it on my own web server.
                 alt="Game Screen at a harder difficulty">
             <figcaption>Game Screen at a harder difficulty</figcaption>
         </figure>
-</div>
-<center>
-    <figure>
-        <img width="200" src="/screenshots/appScreenshot4.png" alt="Game Over Screen">
-        <figcaption>Game Over Screen</figcaption>
-    </figure>
+        <figure>
+             <img width="200" src="/screenshots/appScreenshot4.png" alt="Game Over Screen">
+             <figcaption>Game Over Screen</figcaption>
+        </figure>
 </center>
         
 ## Future Plans
