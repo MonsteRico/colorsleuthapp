@@ -1,6 +1,8 @@
 # Color Sleuth
 
-<center><image alt="App Logo" width="100" src="./assets/logo.png"></center>
+<center>
+        <image alt="App Logo" width="100" src="./assets/logo.png">
+</center>
 
 This is a game about finding the square with a different color. I had always wanted to experiment with making apps and this seemed like a perfect way to get started!
 
