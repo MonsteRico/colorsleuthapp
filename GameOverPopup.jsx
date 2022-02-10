@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import ThemeContext from './ThemeContext';
-import { darkBGColor, lightBGColor } from './colors.js';
+import { darkBGColor, lightBGColor, darkTextColor, lightTextColor } from './colors.js';
 import { hexToRgb } from './utils.js';
 const GameOverPopup = ({ bgColor, high, score }) => {
 
