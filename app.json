@@ -3,7 +3,7 @@
     "name": "Color Sleuth",
     "slug": "ColorSleuthApp",
     "description": "A game about choosing the color thats different!",
-    "version": "1.4.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
     "primaryColor": "#0f64fa",
