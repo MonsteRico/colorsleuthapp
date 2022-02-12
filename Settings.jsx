@@ -4,7 +4,7 @@ import MyButton from "./MyButton";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor, lightPlaceholderTextColor, darkPlaceholderTextColor } from "./colors";
 import ThemeContext from "./ThemeContext";
 import SettingsContext from "./SettingsContext";
-
+import Anchor from "./Anchor";
 const Settings = ({ back }) => {
     let { theme, toggleTheme } = useContext(ThemeContext);
     let { settings, setSettings } = useContext(SettingsContext);
@@ -78,6 +78,10 @@ const Settings = ({ back }) => {
                     <Switch style={styles.switchSetting} value={darkMode} onValueChange={() => setIsDarkMode(darkMode)} />
                 </View>
             </View>
+            <View style={styles.settingContainer}>
+                <Anchor href="https://www.freeprivacypolicy.com/live/70f3d0b7-0487-4fec-b113-ed0b9d7d3177" style={styles.settingName}>Privacy Policy</Anchor>
+            </View>
+
             <MyButton onPress={() => { back(); }} text="Back" />
 
         </SafeAreaView>
