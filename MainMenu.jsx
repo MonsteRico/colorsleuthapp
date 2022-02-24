@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useContext } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
+import React, { useState, useContext } from "react";
+import { Platform, StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
 import ThemeContext from "./ThemeContext";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor } from "./colors";
 import MyButton from "./MyButton";
-const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
+import * as Network from "expo-network";
+const MainMenu = ({ onPlay, onSettings, onHowToPlay, onLeaderboard }) => {
     let { theme, toggleTheme } = useContext(ThemeContext);
     let darkMode = theme === "dark";
 
@@ -33,15 +34,32 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
         }, tinyLogo: {
             flex: 1, marginTop: 25, marginBottom: 10, width: 50, height: undefined, aspectRatio: 1, resizeMode: "contain",
         },
+        largeLogo: {
+            flex: 1, marginTop: 25, marginBottom: 10, width: 200, height: undefined, aspectRatio: 1, resizeMode: "contain",
+        }
     });
     const appLogoImage = (darkMode ? require("./assets/lightLogo.png") : require("./assets/logo.png"));
+
+    function goToLeaderboard() {
+        let isConnected = null;
+        Network.getNetworkStateAsync().then((state) => {
+            isConnected = state.isConnected;
+            console.log(state);
+            if (isConnected) {
+                onLeaderboard();
+            } else {
+                alert("You are not connected to WiFi. Please connect to WiFi to view leaderboards.");
+            }
+        });
+    }
+
     return (
         <>
             <StatusBar style={darkMode ? "light" : "dark"} />
             <SafeAreaView style={styles.container}>
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                     <Image
-                        style={styles.tinyLogo}
+                        style={Platform.OS === "web" ? styles.largeLogo : styles.tinyLogo}
                         source={appLogoImage}
                     />
                 </View>
@@ -50,6 +68,7 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay }) => {
                     <MyButton onPress={onPlay} text="Play" />
                     <MyButton onPress={onHowToPlay} text="How to Play" />
                     <MyButton onPress={onSettings} text="Settings" />
+                    <MyButton onPress={goToLeaderboard} text="Leaderboard" />
                 </View>
                 <View style={{ flex: 2 }}></View>
             </SafeAreaView>

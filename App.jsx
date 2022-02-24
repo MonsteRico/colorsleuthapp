@@ -1,21 +1,27 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState, } from "react";
-import { Text, useColorScheme, } from "react-native";
+import { Platform, Text, useColorScheme, } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Game from "./Game";
 import HowToPlay from "./HowToPlay";
 import MainMenu from "./MainMenu";
 import ThemeContext from "./ThemeContext";
 import SettingsContext from "./SettingsContext";
-
+import * as SecureStore from 'expo-secure-store';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 import Settings from "./Settings";
-
+import Leaderboard from "./Leaderboard";
+import UserContext from "./UserContext";
 const Stack = createNativeStackNavigator();
 
 // Functions to render each screen in the router
 function MainMenuScreen({ route, navigation }) {
-	return <MainMenu onHowToPlay={() => navigation.navigate("HowToPlay")} onSettings={() => navigation.navigate("Settings")} onPlay={() => navigation.navigate("Game")} />;
+	return <MainMenu onHowToPlay={() => navigation.navigate("HowToPlay")}
+		onSettings={() => navigation.navigate("Settings")}
+		onPlay={() => navigation.navigate("Game")}
+		onLeaderboard={() => navigation.navigate("Leaderboard")} />;
 }
 
 function GameScreen({ route, navigation }) {
@@ -28,6 +34,10 @@ function HowToPlayScreen({ route, navigation }) {
 
 function SettingsScreen({ route, navigation }) {
 	return <Settings back={() => navigation.goBack()} />;
+}
+
+function LeaderboardScreen({ route, navigation }) {
+	return <Leaderboard back={() => navigation.goBack()} />;
 }
 const storeData = async (value) => {
 	try {
@@ -80,18 +90,57 @@ export default function App() {
 	Text.defaultProps = Text.defaultProps || {};
 	Text.defaultProps.allowFontScaling = false;
 
+	// Get Unique ID for device
+	const [uniqueID, setUniqueID] = useState(null);
+	let newUser = { id: uniqueID, name: 'NULL', score: 0 }
+	if (Platform.OS === 'android' || Platform.OS === 'ios') {
+		SecureStore.getItemAsync('secure_deviceid').then((value) => {
+			if (value) {
+				setUniqueID(value);
+				console.log(value);
+				newUser.id = value;
+			} else {
+				let uuid = uuidv4();
+				SecureStore.setItemAsync('secure_deviceid', JSON.stringify(uuid)).then(() => {
+					//console.log(fetchUUID)
+					setUniqueID(uuid);
+					newUser.id = uuid;
+				});
+			}
+		});
+	} else {
+		AsyncStorage.getItem('@uniqueID').then((value) => {
+			if (value) {
+				setUniqueID(value);
+				console.log(value);
+				newUser.id = value;
+			} else {
+				let uuid = uuidv4();
+				AsyncStorage.setItem('@uniqueID', uuid).then(() => {
+					setUniqueID(uuid);
+					newUser.id = uuid;
+				});
+			}
+		});
+	}
+	// fetch user info here
+	const [user, setUser] = useState(newUser);
+
 	return (
-		<ThemeContext.Provider value={{ theme, toggleTheme }}>
-			<SettingsContext.Provider value={{ settings, setSettings }}>
-				<NavigationContainer>
-					<Stack.Navigator screenOptions={{ header: () => null, animation: "fade", gestureEnabled: false, }} initialRouteName="MainMenu">
-						<Stack.Screen name="Game" component={GameScreen}></Stack.Screen>
-						<Stack.Screen name="MainMenu" component={MainMenuScreen} />
-						<Stack.Screen name="Settings" component={SettingsScreen} />
-						<Stack.Screen name="HowToPlay" component={HowToPlayScreen} />
-					</Stack.Navigator>
-				</NavigationContainer>
-			</SettingsContext.Provider>
-		</ThemeContext.Provider>
+		<UserContext.Provider value={{ user }}>
+			<ThemeContext.Provider value={{ theme, toggleTheme }}>
+				<SettingsContext.Provider value={{ settings, setSettings }}>
+					<NavigationContainer>
+						<Stack.Navigator screenOptions={{ header: () => null, animation: "fade", gestureEnabled: false, }} initialRouteName="MainMenu">
+							<Stack.Screen name="Game" component={GameScreen}></Stack.Screen>
+							<Stack.Screen name="MainMenu" component={MainMenuScreen} />
+							<Stack.Screen name="Settings" component={SettingsScreen} />
+							<Stack.Screen name="HowToPlay" component={HowToPlayScreen} />
+							<Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+						</Stack.Navigator>
+					</NavigationContainer>
+				</SettingsContext.Provider>
+			</ThemeContext.Provider>
+		</UserContext.Provider>
 	);
 }
