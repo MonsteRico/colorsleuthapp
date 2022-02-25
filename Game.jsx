@@ -10,7 +10,7 @@ import { captureRef } from 'react-native-view-shot';
 import MyButton from "./MyButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SettingsContext from "./SettingsContext";
-
+import { pSBC } from './utils.js';
 // stores the high score value input to AsyncStorage
 const storeData = async (value) => {
 	try {
@@ -105,7 +105,8 @@ const Game = ({ onGameOver }) => {
 	const flash = () => {
 		if (flashing) {
 			flashing = !flashing;
-			var newSquares = generateSquaresArray(level, differentX, differentY, color, color);
+			let flashColor = pSBC(0.5, color);
+			var newSquares = generateSquaresArray(level, differentX, differentY, color, flashColor);
 			setSquares(newSquares);
 		} else {
 			flashing = !flashing;
@@ -128,7 +129,7 @@ const Game = ({ onGameOver }) => {
 			// If the user has no lives left, the game is over
 			if (newLives <= 0) {
 				// Flash the square that was different
-				const id = setInterval(flash, 250);
+				const id = setInterval(flash, 500);
 				// If the score is higher than the high score, set the high score
 				if (score > parseInt(highScore)) {
 					setHighScore(score.toString());
@@ -139,7 +140,7 @@ const Game = ({ onGameOver }) => {
 				setTimeout(() => {
 					clearInterval(id);
 					setGameOver(true);
-				}, 2000);
+				}, 3000);
 			} else {
 				// If the user has lives left, generate a new board without increasing score
 				generateNewBoard(false);
