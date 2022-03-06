@@ -56,7 +56,8 @@ const getData = async () => {
 	}
 }
 
-
+let userServerSet = false;
+let localUserSet = false;
 export default function App() {
 	// Setting up the theme
 	let deviceScheme = useColorScheme();
@@ -92,19 +93,39 @@ export default function App() {
 
 	// Get Unique ID for device
 	const [uniqueID, setUniqueID] = useState(null);
-	let newUser = { id: uniqueID, name: 'NULL', score: 0 }
+	let newUser = { autoID: -1, uuid: uniqueID, username: 'NULL', score: 0 }
 	if (Platform.OS === 'android' || Platform.OS === 'ios') {
+		/* SecureStore.deleteItemAsync("secure_deviceid").then(() => {
+			console.log("Deleted");
+		}
+		).catch(() => {
+			console.log("Error deleting");
+		}); */
 		SecureStore.getItemAsync('secure_deviceid').then((value) => {
-			if (value) {
+			if (value && !localUserSet) {
+				userServerSet = true;
+				localUserSet = true;
 				setUniqueID(value);
-				console.log(value);
-				newUser.id = value;
-			} else {
+				fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/get?uuid=" + value).then(res => res.json()).then(data => {
+					if (data.length > 0) {
+						newUser = { autoID: data[0].autoID, uuid: data[0].uuid, username: data[0].username, score: data[0].score };
+					}
+					fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/getPosition?uuid=" + value).then(res => res.json()).then(data => {
+						newUser = { ...newUser, position: data };
+						console.log(newUser);
+						setUser(newUser);
+					});
+				});
+			} else if (!userServerSet) {
+				userServerSet = true;
 				let uuid = uuidv4();
-				SecureStore.setItemAsync('secure_deviceid', JSON.stringify(uuid)).then(() => {
-					//console.log(fetchUUID)
-					setUniqueID(uuid);
-					newUser.id = uuid;
+				SecureStore.setItemAsync('secure_deviceid', uuid).then(() => {
+					console.log(uuid)
+					fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/add?uuid=" + uuid).then(() => {
+						setUniqueID(uuid);
+					}).catch(err => {
+						console.log(err);
+					});
 				});
 			}
 		});
@@ -113,12 +134,22 @@ export default function App() {
 			if (value) {
 				setUniqueID(value);
 				console.log(value);
-				newUser.id = value;
+				fetch("https://matthewgardner.dev/leaderboardPHP/leaderboard/getUser?uuid=" + value).then(res => res.json()).then(data => {
+					if (data.length > 0) {
+						newUser = { autoID: data[0].autoID, uuid: data[0].uuid, username: data[0].username, score: data[0].score };
+					}
+					setUser(newUser);
+				});
 			} else {
 				let uuid = uuidv4();
 				AsyncStorage.setItem('@uniqueID', uuid).then(() => {
-					setUniqueID(uuid);
-					newUser.id = uuid;
+					//console.log(fetchUUID)
+					fetch("https://matthewgardner.dev/leaderboardPHP/leaderboard/addUser?uuid=" + uuid).then(res => res.json()).then(data => {
+						console.log(data);
+						setUniqueID(uuid);
+					}).catch(err => {
+						console.log(err);
+					});
 				});
 			}
 		});

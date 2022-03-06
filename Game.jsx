@@ -11,6 +11,9 @@ import MyButton from "./MyButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SettingsContext from "./SettingsContext";
 import { pSBC } from './utils.js';
+import * as Network from "expo-network";
+import UserContext from "./UserContext";
+
 // stores the high score value input to AsyncStorage
 const storeData = async (value) => {
 	try {
@@ -60,7 +63,8 @@ const Game = ({ onGameOver }) => {
 	)
 
 	// Set theme
-	const { theme } = useContext(ThemeContext)
+	const { theme } = useContext(ThemeContext);
+	const { user } = useContext(UserContext);
 	const darkMode = theme === "dark";
 
 	// Generate the array of squares with the square at (diffX, diffY) being the different color
@@ -136,11 +140,29 @@ const Game = ({ onGameOver }) => {
 					storeData(score.toString());
 					highScoreSet = false;
 				}
-				// Cancel the flash interval and set game over to true after 2 seconds
-				setTimeout(() => {
-					clearInterval(id);
-					setGameOver(true);
-				}, 3000);
+				let isConnected = null;
+				Network.getNetworkStateAsync().then((state) => {
+					isConnected = state.isConnected;
+					console.log(isConnected);
+					if (isConnected) {
+						// If the user is connected to the internet, send the high score to the server
+						let url = "https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/updateScore?uuid=" + user.uuid + "&score=" + highScore
+						console.log(url);
+						fetch(url).then(() => {
+							setTimeout(() => {
+								clearInterval(id);
+								setGameOver(true);
+							}, 2500);
+						});
+					} else {
+						// Cancel the flash interval and set game over to true after 3 seconds
+						setTimeout(() => {
+							clearInterval(id);
+							setGameOver(true);
+						}, 3000);
+					}
+				});
+
 			} else {
 				// If the user has lives left, generate a new board without increasing score
 				generateNewBoard(false);

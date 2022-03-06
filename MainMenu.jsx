@@ -4,9 +4,49 @@ import { Platform, StyleSheet, Text, View, SafeAreaView, Image } from "react-nat
 import ThemeContext from "./ThemeContext";
 import { darkBGColor, darkTextColor, lightBGColor, lightTextColor } from "./colors";
 import MyButton from "./MyButton";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserContext from "./UserContext";
+
 import * as Network from "expo-network";
+
+// stores the high score value input to AsyncStorage
+const storeData = async (value) => {
+    try {
+        await AsyncStorage.setItem('@highScore', value)
+    } catch (e) {
+        // saving error
+    }
+}
+
+// retrieves the high score value from AsyncStorage
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem('@highScore')
+        if (value !== null) {
+            // We have data!!
+            return value
+        }
+    } catch (e) {
+        // error reading value
+    }
+}
+let highScoreSet = false;
+
 const MainMenu = ({ onPlay, onSettings, onHowToPlay, onLeaderboard }) => {
     let { theme, toggleTheme } = useContext(ThemeContext);
+    const { user } = useContext(UserContext);
+    const [highScore, setHighScore] = useState("0");
+
+    // Check if there is a high score stored in AsyncStorage
+    // if there is, set the high score state variable to the value
+    getData().then(
+        (value) => {
+            if (value != null) {
+                setHighScore(value);
+                highScoreSet = true;
+            }
+        }
+    )
     let darkMode = theme === "dark";
 
     const styles = StyleSheet.create({
@@ -44,9 +84,10 @@ const MainMenu = ({ onPlay, onSettings, onHowToPlay, onLeaderboard }) => {
         let isConnected = null;
         Network.getNetworkStateAsync().then((state) => {
             isConnected = state.isConnected;
-            console.log(state);
             if (isConnected) {
-                onLeaderboard();
+                fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/updateScore?uuid=" + user.uuid + "&score=" + highScore).then(() => {
+                    onLeaderboard();
+                });
             } else {
                 alert("You are not connected to WiFi. Please connect to WiFi to view leaderboards.");
             }
