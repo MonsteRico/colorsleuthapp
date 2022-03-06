@@ -112,7 +112,7 @@ export default function App() {
 					}
 					fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/getPosition?uuid=" + value).then(res => res.json()).then(data => {
 						newUser = { ...newUser, position: data };
-						console.log(newUser);
+						//console.log(newUser);
 						setUser(newUser);
 					});
 				});
@@ -120,7 +120,7 @@ export default function App() {
 				userServerSet = true;
 				let uuid = uuidv4();
 				SecureStore.setItemAsync('secure_deviceid', uuid).then(() => {
-					console.log(uuid)
+					//console.log(uuid)
 					fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/add?uuid=" + uuid).then(() => {
 						setUniqueID(uuid);
 					}).catch(err => {
@@ -133,7 +133,7 @@ export default function App() {
 		AsyncStorage.getItem('@uniqueID').then((value) => {
 			if (value) {
 				setUniqueID(value);
-				console.log(value);
+				//console.log(value);
 				fetch("https://matthewgardner.dev/leaderboardPHP/leaderboard/getUser?uuid=" + value).then(res => res.json()).then(data => {
 					if (data.length > 0) {
 						newUser = { autoID: data[0].autoID, uuid: data[0].uuid, username: data[0].username, score: data[0].score };
@@ -145,7 +145,7 @@ export default function App() {
 				AsyncStorage.setItem('@uniqueID', uuid).then(() => {
 					//console.log(fetchUUID)
 					fetch("https://matthewgardner.dev/leaderboardPHP/leaderboard/addUser?uuid=" + uuid).then(res => res.json()).then(data => {
-						console.log(data);
+						//console.log(data);
 						setUniqueID(uuid);
 					}).catch(err => {
 						console.log(err);

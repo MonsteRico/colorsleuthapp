@@ -78,7 +78,7 @@ const Leaderboard = ({ back }) => {
 	});
 
 	const { user } = useContext(UserContext)
-	console.log(user);
+	//console.log(user);
 
 	const [selectedId, setSelectedId] = useState(null);
 
@@ -89,7 +89,7 @@ const Leaderboard = ({ back }) => {
 	const [inputText, setInputText] = useState("");
 
 	const handleSubmit = () => {
-		console.log(inputText);
+		//console.log(inputText);
 		handleUsernameUpdate(inputText);
 		setVisible(false);
 	}
@@ -98,7 +98,7 @@ const Leaderboard = ({ back }) => {
 	};
 
 	const handleCancel = () => {
-		console.log("CANCEL");
+		//console.log("CANCEL");
 		setVisible(false);
 	};
 
@@ -106,7 +106,7 @@ const Leaderboard = ({ back }) => {
 
 
 	function handleUsernameUpdate(value) {
-		console.log(value);
+		//console.log(value);
 		let url = "https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/updateUser?uuid=" + user.uuid + "&username=" + value;
 		fetch(url).then(res => res.json()).then((result) => {
 			Alert.alert("Username Change", result);
