@@ -77,7 +77,7 @@ const Leaderboard = ({ back }) => {
 		},
 	});
 
-	const { user } = useContext(UserContext)
+	const { user, setUser } = useContext(UserContext)
 	//console.log(user);
 
 	const [selectedId, setSelectedId] = useState(null);
@@ -141,6 +141,13 @@ const Leaderboard = ({ back }) => {
 				(result) => {
 					for (let i = 0; i < result.length; i++) {
 						result[i] = { ...result[i], position: i + 1 };
+						if (result[i].uuid == user.uuid) {
+							let newUser = { ...user };
+							newUser.username = result[i].username;
+							newUser.score = result[i].score;
+							newUser.position = result[i].position;
+							setUser(newUser);
+						}
 					}
 					setIsLoaded(true);
 					setScores(result);

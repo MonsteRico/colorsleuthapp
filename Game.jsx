@@ -64,7 +64,7 @@ const Game = ({ onGameOver }) => {
 
 	// Set theme
 	const { theme } = useContext(ThemeContext);
-	const { user } = useContext(UserContext);
+	const { user, setUser } = useContext(UserContext);
 	const darkMode = theme === "dark";
 
 	// Generate the array of squares with the square at (diffX, diffY) being the different color
@@ -135,21 +135,27 @@ const Game = ({ onGameOver }) => {
 				// Flash the square that was different
 				const id = setInterval(flash, 500);
 				// If the score is higher than the high score, set the high score
+				var localHighScore = parseInt(highScore);
 				if (score > parseInt(highScore)) {
 					setHighScore(score.toString());
+					localHighScore = score;
 					storeData(score.toString());
 					highScoreSet = false;
 				}
 				let isConnected = null;
 				Network.getNetworkStateAsync().then((state) => {
 					isConnected = state.isConnected;
-					console.log(isConnected);
+					//console.log(isConnected);
 					if (isConnected) {
 						// If the user is connected to the internet, send the high score to the server
-						let url = "https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/updateScore?uuid=" + user.uuid + "&score=" + highScore
-						console.log(url);
+						let url = "https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/updateScore?uuid=" + user.uuid + "&score=" + localHighScore;
+						//console.log(url);
 						fetch(url).then(() => {
 							setTimeout(() => {
+								let newUser = { ...user };
+								newUser.score = localHighScore;
+								setUser(newUser);
+								//console.log(newUser);
 								clearInterval(id);
 								setGameOver(true);
 							}, 2500);
@@ -209,7 +215,7 @@ const Game = ({ onGameOver }) => {
 	function generateNewBoard(correct) {
 		// Increase the score if the user tapped the correct square
 		// Set the state variables to their new values
-		var newScore = correct ? score + 1 : score;
+		var newScore = correct ? score + 10 : score;
 		var newLevelData = checkLevelUp(newScore);
 		var newLevel = newLevelData[0];
 		var newColorLevel = newLevelData[1];
@@ -270,7 +276,7 @@ const Game = ({ onGameOver }) => {
 				// web (although web isn't fully supported currently due to missing dependencies)
 				navigator.clipboard.writeText(`I got a score of ${score} in Color Sleuth! ` +
 					`You can play it here: ${appLink}`).then(function () {
-						console.log('Async: Copying to clipboard was successful!');
+						//console.log('Async: Copying to clipboard was successful!');
 						alert("Text copied to clipboard!");
 					}, function (err) {
 						alert("ERROR COPYING TO CLIPBOARD: " + err);

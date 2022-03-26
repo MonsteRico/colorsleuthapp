@@ -18,10 +18,11 @@ const Stack = createNativeStackNavigator();
 
 // Functions to render each screen in the router
 function MainMenuScreen({ route, navigation }) {
-	return <MainMenu onHowToPlay={() => navigation.navigate("HowToPlay")}
-		onSettings={() => navigation.navigate("Settings")}
-		onPlay={() => navigation.navigate("Game")}
-		onLeaderboard={() => navigation.navigate("Leaderboard")} />;
+	return <MainMenu onHowToPlay={() => { navigation.navigate("HowToPlay") }
+	}
+		onSettings={() => { navigation.navigate("Settings") }}
+		onPlay={() => { navigation.navigate("Game") }}
+		onLeaderboard={() => { navigation.navigate("Leaderboard") }} />;
 }
 
 function GameScreen({ route, navigation }) {
@@ -158,7 +159,7 @@ export default function App() {
 	const [user, setUser] = useState(newUser);
 
 	return (
-		<UserContext.Provider value={{ user }}>
+		<UserContext.Provider value={{ user, setUser }}>
 			<ThemeContext.Provider value={{ theme, toggleTheme }}>
 				<SettingsContext.Provider value={{ settings, setSettings }}>
 					<NavigationContainer>

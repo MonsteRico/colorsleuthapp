@@ -10,7 +10,7 @@ const InputUsernameDialog = ({ handleCancel, handleUsernameUpdate, visible }) =>
     const [inputText, setInputText] = useState("");
 
     const handleSubmit = () => {
-        console.log(inputText);
+        //console.log(inputText);
         handleUsernameUpdate(inputText);
     }
 
