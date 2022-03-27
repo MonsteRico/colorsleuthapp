@@ -215,7 +215,7 @@ const Game = ({ onGameOver }) => {
 	function generateNewBoard(correct) {
 		// Increase the score if the user tapped the correct square
 		// Set the state variables to their new values
-		var newScore = correct ? score + 10 : score;
+		var newScore = correct ? score + 1 : score;
 		var newLevelData = checkLevelUp(newScore);
 		var newLevel = newLevelData[0];
 		var newColorLevel = newLevelData[1];
