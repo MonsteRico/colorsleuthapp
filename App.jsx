@@ -107,6 +107,8 @@ export default function App() {
 				userServerSet = true;
 				localUserSet = true;
 				setUniqueID(value);
+				newUser.uuid = value;
+				setUser(newUser);
 				fetch("https://matthewgardner.dev/leaderboardPHP/index.php/leaderboard/get?uuid=" + value).then(res => res.json()).then(data => {
 					if (data.length > 0) {
 						newUser = { autoID: data[0].autoID, uuid: data[0].uuid, username: data[0].username, score: data[0].score };
